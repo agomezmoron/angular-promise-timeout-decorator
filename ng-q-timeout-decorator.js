@@ -24,8 +24,6 @@
 
 /**
  * Angular promise decorator to be rejected if it's still pending and the timeout is exceed.
- * @param {type} angular
- * @returns {angular.module}
  * @author Alejandro Gomez <agommor@gmail.com>
  * @author Ignacio Gonzalez <natete981@gmail.com>
  * @since 20160308
