@@ -40,30 +40,30 @@
       timeoutMessage: 'Promise timeout exceeded!'
     })
     .config(config);
-  
+
   /* @ngInject */
   function config($provide) {
     // I wish we could inject $timeout into config function
     // instead of using setTimeout directly.
     $provide.decorator('$q', decorateQ);
-    
+
     /* @ngInject */
     function decorateQ($delegate, ngQTimeoutDecoratorConfig) {
       var _defer = $delegate.defer;
       $delegate.defer = function () {
         var deferred = _defer();
-        
+
         // flag to know if the promise was resolved
         var pending = true;
-        
+
         // getting the original deferred methods
         var _resolve = deferred.resolve;
         var _reject = deferred.reject;
         var _notify = deferred.notify;
-        
+
         // Defining the timer function
         var _timer = setTimeout(timeoutExceeded, ngQTimeoutDecoratorConfig.timeout * 1000);
-        
+
         // Decorating methods
         deferred.resolve = function () {
           pending = false;
@@ -93,8 +93,7 @@
          *  message: Defined message in the timeoutMessage constant.
          *  timeout: Defined timeout in the timeout constant}.
          */
-        function timeoutExceeded() {      
-
+        function timeoutExceeded() {
           if (pending) {
             var result = {
               message: ngQTimeoutDecoratorConfig.timeoutMessage,
@@ -104,14 +103,13 @@
               typeof ngQTimeoutDecoratorConfig.timeoutFunction === "function") {
               ngQTimeoutDecoratorConfig.timeoutFunction(arguments);
             }
-            console.log('rejecting')
             deferred.reject(result);
           }
         }
 
         return deferred;
       };
-      
+
       return $delegate;
     }
 
