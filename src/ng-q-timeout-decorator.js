@@ -23,7 +23,9 @@
 
 
 /**
- * Angular promise decorator to be rejected if it's still pending and the timeout is exceed.
+ * Angular promise decorator to be rejected if it's still pending and the timeout is exceeded.
+ * @param {type} angular
+ * @returns {angular.module}
  * @author Alejandro Gomez <agommor@gmail.com>
  * @author Ignacio Gonzalez <natete981@gmail.com>
  * @since 20160308
@@ -35,49 +37,55 @@
       // timeout in seconds
       timeout: 60,
       timeoutFunction: undefined,
-      timeoutMessage: 'Promise timeout exceed!'
+      timeoutMessage: 'Promise timeout exceeded!'
     })
     .config(config);
+
   /* @ngInject */
   function config($provide) {
     // I wish we could inject $timeout into config function
     // instead of using setTimeout directly.
     $provide.decorator('$q', decorateQ);
+
     /* @ngInject */
-    function decorateQ($delegate, $timeout, ngQTimeoutDecoratorConfig) {
+    function decorateQ($delegate, ngQTimeoutDecoratorConfig) {
       var _defer = $delegate.defer;
       $delegate.defer = function () {
         var deferred = _defer();
+
         // flag to know if the promise was resolved
         var pending = true;
+
         // getting the original deferred methods
         var _resolve = deferred.resolve;
         var _reject = deferred.reject;
         var _notify = deferred.notify;
+
         // Defining the timer function
-        var _timer = $timeout(timeoutExceed, ngQTimeoutDecoratorConfig.timeout * 1000);
+        var _timer = setTimeout(timeoutExceeded, ngQTimeoutDecoratorConfig.timeout * 1000);
+
         // Decorating methods
         deferred.resolve = function () {
           pending = false;
           // cancelling the timeout execution
-          $timeout.cancel(_timer);
+          clearTimeout(_timer);
           return _resolve.apply(deferred, arguments);
         };
         deferred.reject = function () {
           pending = false;
           // cancelling the timeout execution
-          $timeout.cancel(_timer);
+          clearTimeout(_timer);
           return _reject.apply(deferred, arguments);
         };
         deferred.notify = function () {
           pending = false;
           // cancelling the timeout execution
-          $timeout.cancel(_timer);
+          clearTimeout(_timer);
           return _notify.apply(deferred, arguments);
         };
 
         /**
-         * Function to be executed once the timeout is exceed. Only if the promise is still pending, it will reject the
+         * Function to be executed once the timeout is exceeded. Only if the promise is still pending, it will reject the
          * promise and will also execute the timeoutFunction if it's a defined function. The promise will be rejected
          * following the structure:
          *  { message: Defined message in the timeoutMessage constant, timeout: Defined timeout in the timeout constant}.
@@ -85,7 +93,7 @@
          *  message: Defined message in the timeoutMessage constant.
          *  timeout: Defined timeout in the timeout constant}.
          */
-        function timeoutExceed() {
+        function timeoutExceeded() {
           if (pending) {
             var result = {
               message: ngQTimeoutDecoratorConfig.timeoutMessage,
@@ -101,6 +109,7 @@
 
         return deferred;
       };
+
       return $delegate;
     }
 
