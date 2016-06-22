@@ -48,7 +48,7 @@
     $provide.decorator('$q', decorateQ);
 
     /* @ngInject */
-    function decorateQ($delegate, ngQTimeoutDecoratorConfig) {
+    function decorateQ($delegate, $exceptionHandler, ngQTimeoutDecoratorConfig) {
       var _defer = $delegate.defer;
       $delegate.defer = function () {
         var deferred = _defer();
@@ -104,6 +104,7 @@
               ngQTimeoutDecoratorConfig.timeoutFunction(arguments);
             }
             deferred.reject(result);
+            $exceptionHandler(result);
           }
         }
 
