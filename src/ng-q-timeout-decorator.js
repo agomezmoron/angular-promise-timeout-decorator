@@ -86,8 +86,8 @@
 
         /**
          * Function to be executed once the timeout is exceeded. Only if the promise is still pending, it will reject the
-         * promise and will also execute the timeoutFunction if it's a defined function. The promise will be rejected
-         * following the structure:
+         * promise, will rais an AngularJS exception and will also execute the timeoutFunction if it's a defined function.
+         * The promise will be rejected the structure:
          *  { message: Defined message in the timeoutMessage constant, timeout: Defined timeout in the timeout constant}.
          * @returns JSON with the following data:
          *  message: Defined message in the timeoutMessage constant.
@@ -100,7 +100,7 @@
               timeout: ngQTimeoutDecoratorConfig.timeout
             };
             if (ngQTimeoutDecoratorConfig.timeoutFunction &&
-              typeof ngQTimeoutDecoratorConfig.timeoutFunction === "function") {
+              typeof ngQTimeoutDecoratorConfig.timeoutFunction === 'function') {
               ngQTimeoutDecoratorConfig.timeoutFunction(arguments);
             }
             deferred.reject(result);
