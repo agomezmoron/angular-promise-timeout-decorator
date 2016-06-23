@@ -77,12 +77,10 @@
           clearTimeout(_timer);
           return _reject.apply(deferred, arguments);
         };
-        deferred.notify = function () {
-          pending = false;
-          // cancelling the timeout execution
-          clearTimeout(_timer);
-          return _notify.apply(deferred, arguments);
-        };
+        
+        // notify is not extended because we don't want notify to clear the timeout. Instead the desired behavior is
+        // the promise to be rejected once the timeout is exceeded, either if the promise is still alive and notifying
+        // or the promise is hanged.
 
         /**
          * Function to be executed once the timeout is exceeded. Only if the promise is still pending, it will reject the
