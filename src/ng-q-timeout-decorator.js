@@ -59,25 +59,31 @@
         // getting the original deferred methods
         var _resolve = deferred.resolve;
         var _reject = deferred.reject;
-        var _notify = deferred.notify;
 
         // Defining the timer function
         var _timer = setTimeout(timeoutExceeded, ngQTimeoutDecoratorConfig.timeout * 1000);
 
         // Decorating methods
         deferred.resolve = function () {
-          pending = false;
-          // cancelling the timeout execution
-          clearTimeout(_timer);
-          return _resolve.apply(deferred, arguments);
+          // the promise is resolved only if it hasn't been resolved or rejected before
+          if (pending) {
+            pending = false;
+            // cancelling the timeout execution
+            clearTimeout(_timer);
+            return _resolve.apply(deferred, arguments);
+          }
         };
+
         deferred.reject = function () {
-          pending = false;
-          // cancelling the timeout execution
-          clearTimeout(_timer);
-          return _reject.apply(deferred, arguments);
+          // the promise is rejected only if it hasn't been resolved or rejected before
+          if (pending) {
+            pending = false;
+            // cancelling the timeout execution
+            clearTimeout(_timer);
+            return _reject.apply(deferred, arguments);
+          }
         };
-        
+
         // notify is not extended because we don't want notify to clear the timeout. Instead the desired behavior is
         // the promise to be rejected once the timeout is exceeded, either if the promise is still alive and notifying
         // or the promise is hanged.
