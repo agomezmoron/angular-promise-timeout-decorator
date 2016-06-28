@@ -1,6 +1,7 @@
-before_install:
-    npm install
-install: true
+language: node_js
+node_js: node
+install:
+  npm install
 deploy:
   provider: npm
   email: agommor@gmail.com
