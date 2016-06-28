@@ -1,6 +1,7 @@
 # angular-promise-timeout-decorator
 It adds a timeout execution for a promise returned by the $q service, rejecting it if needed.
 
+[![Build Status](https://travis-ci.org/agomezmoron/angular-promise-timeout-decorator.svg?branch=master)](https://travis-ci.org/agomezmoron/angular-promise-timeout-decorator)<br />
 [![NPM][angular-promise-timeout-decorator-icon]][angular-promise-timeout-decorator-url]
 
 ## Install
