@@ -1,5 +1,6 @@
-install:
+before_install:
     npm install
+install: true
 deploy:
   provider: npm
   email: agommor@gmail.com
