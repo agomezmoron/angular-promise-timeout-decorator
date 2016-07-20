@@ -1,7 +1,7 @@
 {
   "name": "angular-promise-timeout-decorator",
   "description": "It adds a timeout execution for a promise returned by the $q service, rejecting it if needed.",
-  "version": "0.0.7",
+  "version": "1.0.0",
   "author": {
     "name": "Alejandro Gomez",
     "email": "agommor@gmail.com",

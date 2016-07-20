@@ -37,7 +37,8 @@
       // timeout in seconds
       timeout: 60,
       timeoutFunction: undefined,
-      timeoutMessage: 'Promise timeout exceeded!'
+      timeoutMessage: 'Promise timeout exceeded!',
+      throwException: true
     })
     .config(config);
 
@@ -108,7 +109,9 @@
               ngQTimeoutDecoratorConfig.timeoutFunction(arguments);
             }
             deferred.reject(result);
-            $exceptionHandler(result);
+            if (ngQTimeoutDecoratorConfig.throwException) {
+              $exceptionHandler(result);
+            }
           }
         }
 
