@@ -19,12 +19,13 @@ Installing using [NPM](https://www.npmjs.com):
 You can use it directly adding the dependency in your current module:
 
  `angular.module('MyModule', ['angular-promise-timeout-decorator'])`
- 
+
  Also you can parametrize the library defining:
 
 * **timeout:** Number of seconds as maximum timeout (by default, 60 seconds).
 * **timeoutFunction:** Additional function to be executed after exceeding the timeout. After executing that function, the promise will be rejected.
 * **timeoutMessage:** Personalized message for the exceed timeout promise. By defaul the message is: "Promise timeout exceed!"
+* **throwException:** Enables or disable throwing an Exception to the $exceptionHandler. By default the values is true.
 
 Example:
 
@@ -35,7 +36,8 @@ function config(ngQTimeoutDecoratorConfig) {
   ngQTimeoutDecoratorConfig.timeoutFunction = function () {
     console.log('Hello world!');
   }
-  ngQTimeoutDecoratorConfig.timeoutMessage = 'This is my custom message!'
+  ngQTimeoutDecoratorConfig.timeoutMessage = 'This is my custom message!';
+  ngQTimeoutDecoratorConfig.throwException = true;
 }
 ```
 

@@ -38,7 +38,8 @@
       timeout: 60,
       timeoutFunction: undefined,
       timeoutMessage: 'Promise timeout exceeded!',
-      isActive: true
+      isActive: true,
+      throwException: true
     })
     .config(config);
 
@@ -60,7 +61,6 @@
         // getting the original deferred methods
         var _resolve = deferred.resolve;
         var _reject = deferred.reject;
-        var _notify = deferred.notify;
 
         if(ngQTimeoutDecoratorConfig.isActive) {
           // Defining the timer function
@@ -94,8 +94,8 @@
 
         /**
          * Function to be executed once the timeout is exceeded. Only if the promise is still pending, it will reject the
-         * promise and will also execute the timeoutFunction if it's a defined function. The promise will be rejected
-         * following the structure:
+         * promise, will raise an AngularJS exception and will also execute the timeoutFunction if it's a defined function.
+         * The promise will be rejected the structure:
          *  { message: Defined message in the timeoutMessage constant, timeout: Defined timeout in the timeout constant}.
          * @returns JSON with the following data:
          *  message: Defined message in the timeoutMessage constant.
@@ -108,11 +108,13 @@
               timeout: ngQTimeoutDecoratorConfig.timeout
             };
             if (ngQTimeoutDecoratorConfig.timeoutFunction &&
-              typeof ngQTimeoutDecoratorConfig.timeoutFunction === "function") {
+              typeof ngQTimeoutDecoratorConfig.timeoutFunction === 'function') {
               ngQTimeoutDecoratorConfig.timeoutFunction(arguments);
             }
             deferred.reject(result);
-            $exceptionHandler(result);
+            if (ngQTimeoutDecoratorConfig.throwException) {
+              $exceptionHandler(result);
+            }
           }
         }
 
